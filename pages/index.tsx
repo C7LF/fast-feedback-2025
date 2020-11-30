@@ -2,9 +2,10 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { useAuth } from '../lib/auth'
 
-const Home = () => {
+const Home: React.FunctionComponent = () => {
   const auth = useAuth()
-  const {user} = auth
+  const { user } = auth
+
   return (
     <div className={styles.container}>
       <Head>
@@ -26,9 +27,9 @@ const Home = () => {
         {user && (
           <button onClick={() => auth.signout()}>Sign Out</button>
         )}
-        
+
         <div>
-          {user?.email}
+          {user && user.email}
         </div>
       </main>
 
