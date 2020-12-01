@@ -10,33 +10,49 @@ import React, {
 import firebase from "./firebase";
 
 export interface IFirebaseContext {
-    user: firebase.User,
-    signinWithGitHub: () => Promise<any>,
-    signout: () => Promise<any>
+  user: User;
+  signinWithGitHub: () => Promise<any>;
+  signout: () => Promise<any>;
+}
+
+interface User {
+  uid: string;
+  email: string;
+  name: string;
+  provider: string;
 }
 
 export const AuthContext = createContext({} as IFirebaseContext);
 
 export const AuthProvider = ({ children }) => {
-    const auth = useProvideAuth();
-    return (<AuthContext.Provider value={auth}>{children}</AuthContext.Provider>);
-}
+  const auth = useProvideAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+};
 
 export const useAuth = (): IFirebaseContext => {
   return useContext(AuthContext);
 };
 
 export const useProvideAuth = (): IFirebaseContext => {
-  const [user, setUser] = useState<firebase.User>(null);
+  const [user, setUser] = useState<User>(null);
 
-  const signinWithGitHub = (): Promise<any> => {
-    return firebase
+  const handleUser = (rawUser: firebase.User) => {
+    if (rawUser) {
+      const user = formatUser(rawUser);
+
+      setUser(user);
+      return user;
+    } else {
+      setUser(null);
+      return false;
+    }
+  };
+
+  const signinWithGitHub = async (): Promise<any> => {
+    const response = await firebase
       .auth()
-      .signInWithRedirect(new firebase.auth.GithubAuthProvider())
-      .then((response: any) => {
-        setUser(response.user);
-        return response.user;
-      });
+      .signInWithRedirect(new firebase.auth.GithubAuthProvider());
+    return handleUser(response as any);
   };
 
   const signout = (): Promise<any> => {
@@ -47,13 +63,9 @@ export const useProvideAuth = (): IFirebaseContext => {
   };
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
+    const unsubscribe = firebase
+      .auth()
+      .onAuthStateChanged((user) => handleUser(user));
     return () => unsubscribe();
   }, []);
 
@@ -61,5 +73,14 @@ export const useProvideAuth = (): IFirebaseContext => {
     user,
     signinWithGitHub,
     signout,
+  };
+};
+
+const formatUser = (user: firebase.User): User => {
+  return {
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName,
+    provider: user.providerData[0].providerId,
   };
 };
