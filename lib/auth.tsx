@@ -2,10 +2,9 @@ import React, {
   useState,
   useEffect,
   useContext,
-  createContext,
-  Context,
-  ContextType,
+  createContext
 } from "react";
+import { createUser } from "./db";
 
 import firebase from "./firebase";
 
@@ -20,6 +19,7 @@ interface User {
   email: string;
   name: string;
   provider: string;
+  photoUrl: string;
 }
 
 export const AuthContext = createContext({} as IFirebaseContext);
@@ -40,7 +40,9 @@ export const useProvideAuth = (): IFirebaseContext => {
     if (rawUser) {
       const user = formatUser(rawUser);
 
+      createUser(user.uid, user);
       setUser(user);
+      
       return user;
     } else {
       setUser(null);
@@ -55,11 +57,9 @@ export const useProvideAuth = (): IFirebaseContext => {
     return handleUser(response as any);
   };
 
-  const signout = (): Promise<any> => {
-    return firebase
-      .auth()
-      .signOut()
-      .then(() => setUser(null));
+  const signout = async (): Promise<any> => {
+    await firebase.auth().signOut();
+    return setUser(null);
   };
 
   useEffect(() => {
@@ -82,5 +82,6 @@ const formatUser = (user: firebase.User): User => {
     email: user.email,
     name: user.displayName,
     provider: user.providerData[0].providerId,
+    photoUrl: user.photoURL,
   };
 };

@@ -1,36 +1,28 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import { useAuth } from '../lib/auth'
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
+import { useAuth } from "@/lib/auth";
+import React from "react";
+import { Button, Code, Heading } from "@chakra-ui/react";
 
 const Home: React.FunctionComponent = () => {
-  const auth = useAuth()
-  const { user } = auth
+  const auth = useAuth();
+  const { user } = auth;
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Fast Feedback
-        </h1>
+        <Heading>Fast Feedback</Heading>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+        <p>
+          Get started by editing{" "}
+          <Code>{user && user.name}</Code>
         </p>
-
-        <button onClick={() => auth.signinWithGitHub()}>Sign In</button>
-        {user && (
-          <button onClick={() => auth.signout()}>Sign Out</button>
+        
+        {user ? (
+          <Button onClick={() => auth.signout()}>Sign Out</Button>
+        ) : (
+          <Button onClick={() => auth.signinWithGitHub()}>Sign In</Button>
         )}
-
-        <div>
-          {user && user.email}
-        </div>
       </main>
 
       <footer className={styles.footer}>
@@ -39,12 +31,12 @@ const Home: React.FunctionComponent = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
