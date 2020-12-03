@@ -8,7 +8,7 @@ const ff = {
     normal: 400,
     medium: 600,
     bold: 700,
-  },
+  }
 };
 
 export const theme = extendTheme({ ff });
