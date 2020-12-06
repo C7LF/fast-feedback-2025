@@ -14,7 +14,7 @@ export interface IFirebaseContext {
   signout: () => Promise<any>;
 }
 
-interface User {
+export interface User {
   uid: string;
   email: string;
   name: string;

@@ -4,7 +4,7 @@ import DashboardShell from "./dashboard-shell";
 
 const FreePlanEmptyPlan: React.FunctionComponent = () => {
   return <DashboardShell>
-        <Box p={10} backgroundColor="whiteAlpha.500" mt={5} textAlign="center">
+        <Box pt={50} pb={50} backgroundColor="whiteAlpha.500" mt={5} textAlign="center">
             <Heading color="#1a1a1a" size="lg">
                 Get feedback on your site instantly
             </Heading>
