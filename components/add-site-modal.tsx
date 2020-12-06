@@ -13,22 +13,48 @@ import {
   FormControl,
   Input,
   FormErrorMessage,
+  useToast,
+  Icon,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { createSite } from "@/lib/db";
+import { useAuth } from "@/lib/auth";
 
 type SiteInput = {
-    site: string
-    url: URL
+  site: string;
+  url: URL;
+};
+
+interface AddSiteModal {
+  text: string;
+  icon?: any;
 }
 
-const AddSiteModal = () => {
+const AddSiteModal = ({ text, icon }: AddSiteModal) => {
+  const auth = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef();
+  const toast = useToast();
 
   const { register, handleSubmit, errors } = useForm<SiteInput>();
 
-  const onCreateSite = (data: SiteInput) => createSite(data)
+  const { user } = auth;
+
+  const onCreateSite = (data: SiteInput) => {
+    createSite({
+      authorId: user.uid,
+      createdAt: new Date().toISOString(),
+      ...data,
+    });
+    toast({
+      title: "Sucess!",
+      description: "Site added",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+    onClose();
+  };
 
   return (
     <>
@@ -39,8 +65,9 @@ const AddSiteModal = () => {
         fontWeight="bold"
         backgroundColor="#282828"
         onClick={onOpen}
+        leftIcon={icon}
       >
-        Add site
+        {text}
       </Button>
 
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -56,7 +83,9 @@ const AddSiteModal = () => {
                 name="site"
                 ref={register({ required: true })}
               />
-                {errors.site && <FormErrorMessage>Site name is required</FormErrorMessage>}
+              {errors.site && (
+                <FormErrorMessage>Site name is required</FormErrorMessage>
+              )}
             </FormControl>
 
             <FormControl mt={4}>
@@ -66,7 +95,9 @@ const AddSiteModal = () => {
                 name="url"
                 ref={register({ required: true })}
               />
-              {errors.url && <FormErrorMessage>Link is required</FormErrorMessage>}
+              {errors.url && (
+                <FormErrorMessage>Link is required</FormErrorMessage>
+              )}
             </FormControl>
           </ModalBody>
 

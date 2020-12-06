@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { FireIcon } from "@/styles/icons/fire";
 import { useAuth } from "@/lib/auth";
+import AddSiteModal from "./add-site-modal";
+import { AddIcon } from "@chakra-ui/icons";
 
 const DashboardShell: React.FunctionComponent = ({ children }) => {
   const auth = useAuth();
@@ -50,8 +52,12 @@ const DashboardShell: React.FunctionComponent = ({ children }) => {
             isInline
             justifyContent="flex-start"
           >
-            <Link>Account</Link>
-            <Avatar size="sm" src={user.photoUrl} />
+            {user && (
+              <>
+                <Link>Account</Link>
+                <Avatar size="sm" src={user?.photoUrl} />
+              </>
+            )}
           </Stack>
         </Box>
       </Flex>
@@ -64,15 +70,20 @@ const DashboardShell: React.FunctionComponent = ({ children }) => {
         height="100%"
       >
         <Box maxWidth="1140px" width="100%">
-          <Breadcrumb>
-            <BreadcrumbItem m={0} pl={0} color="#060606">
-              <BreadcrumbLink color="#2c2c2c">Sites</BreadcrumbLink>
-            </BreadcrumbItem>
-            <Heading color="#1a1a1a" size="2xl">
-              Sites
-            </Heading>
-            {children}
-          </Breadcrumb>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Box>
+              <Breadcrumb>
+                <BreadcrumbItem m={0} pl={0} color="#060606">
+                  <BreadcrumbLink>Sites</BreadcrumbLink>
+                </BreadcrumbItem>
+              </Breadcrumb>
+              <Heading color="#1a1a1a" size="2xl">
+                My Sites
+              </Heading>
+            </Box>
+            <AddSiteModal icon={<AddIcon boxSize={3} />} text="Add site" />
+          </Flex>
+          {children}
         </Box>
       </Flex>
     </Flex>
