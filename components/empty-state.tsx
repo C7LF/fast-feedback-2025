@@ -1,5 +1,6 @@
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
 import React from "react";
+import AddSiteModal from "./add-site-modal";
 import DashboardShell from "./dashboard-shell";
 
 const EmptyState: React.FunctionComponent = () => {
@@ -12,15 +13,7 @@ const EmptyState: React.FunctionComponent = () => {
         <Text color="#222222" pt={15} pb={25}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </Text>
-        <Button
-          variant="solid"
-          size="md"
-          color="#ffffff"
-          fontWeight="bold"
-          backgroundColor="#282828"
-        >
-          Add site
-        </Button>
+        <AddSiteModal />
       </Box>
     </DashboardShell>
   );
