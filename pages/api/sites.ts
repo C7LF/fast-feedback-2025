@@ -9,5 +9,5 @@ export default async (_: NextApiRequest, res: NextApiResponse) => {
     sites.push({ id: site.id, ...site.data() });
   });
 
-  res.status(200).json(sites);
+  res.status(200).json({ sites });
 };

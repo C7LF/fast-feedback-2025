@@ -19,6 +19,8 @@ import {
 import { useForm } from "react-hook-form";
 import { createSite } from "@/lib/db";
 import { useAuth } from "@/lib/auth";
+import useSWR, { mutate } from "swr";
+import { fetcher } from "@/utils/fetcher";
 
 type SiteInput = {
   site: string;
@@ -35,17 +37,19 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef();
   const toast = useToast();
+  const { data } = useSWR("/api/sites", fetcher);
 
   const { register, handleSubmit, errors } = useForm<SiteInput>();
 
   const { user } = auth;
 
   const onCreateSite = (data: SiteInput) => {
-    createSite({
+    const newSite = {
       authorId: user.uid,
       createdAt: new Date().toISOString(),
       ...data,
-    });
+    };
+    createSite(newSite);
     toast({
       title: "Sucess!",
       description: "Site added",
@@ -53,6 +57,13 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
       duration: 3000,
       isClosable: true,
     });
+    mutate(
+      "/api/sites",
+      async (data) => {
+        return { sites: [...data.sites, newSite] };
+      },
+      false
+    );
     onClose();
   };
 
@@ -80,7 +91,7 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
               <FormLabel>Name</FormLabel>
               <Input
                 placeholder="My site"
-                name="site"
+                name="name"
                 ref={register({ required: true })}
               />
               {errors.site && (

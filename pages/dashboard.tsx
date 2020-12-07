@@ -1,16 +1,21 @@
 import { useAuth } from "@/lib/auth";
 import React from "react";
-import { Box, Button, Code, Flex, Heading, Icon } from "@chakra-ui/react";
-import { FireIcon } from "@/styles/icons/fire";
 import EmptyState from "@/components/empty-state";
 import SiteTableSkeleton from "@/components/site-table-skeleton";
 import DashboardShell from "@/components/dashboard-shell";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+import SiteTable from "@/components/site-table";
 
 const Dashboard = () => {
   const auth = useAuth();
   const { user } = auth;
 
-  if (!user) {
+  const { data } = useSWR("/api/sites", fetcher);
+
+  console.log(data);
+
+  if (!data) {
     return (
       <DashboardShell>
         <SiteTableSkeleton />
@@ -20,7 +25,7 @@ const Dashboard = () => {
 
   return (
     <DashboardShell>
-      <EmptyState />
+      {data.sites ? <SiteTable sites={data.sites} /> : <EmptyState />}
     </DashboardShell>
   );
 };
