@@ -1,5 +1,7 @@
 import { getAllFeedback, getAllSites } from "@/lib/db-admin";
-import Feedback from "@/components/feedback"
+import Feedback from "@/components/feedback";
+import React from "react";
+import { Box } from "@chakra-ui/react";
 
 export async function getStaticProps(context) {
   const siteId = context.params.siteId;
@@ -27,9 +29,19 @@ export async function getStaticPaths() {
 }
 
 const SiteFeedback = ({ initialFeedback }) => {
-  return initialFeedback.map((feedback) => (
-    <Feedback key={feedback.id} {...feedback} />
-  ));
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      with="full"
+      maxWith="700px"
+      margin="0 auto"
+    >
+      {initialFeedback.map((feedback) => (
+        <Feedback key={feedback.id} {...feedback} />
+      ))}
+    </Box>
+  );
 };
 
 export default SiteFeedback;

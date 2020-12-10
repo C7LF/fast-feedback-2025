@@ -11,9 +11,7 @@ const Dashboard = () => {
   const auth = useAuth();
   const { user } = auth;
 
-  const { data } = useSWR("/api/sites", fetcher);
-
-  // console.log(data);
+  const { data }: any = useSWR("/api/sites", fetcher);
 
   if (!data) {
     return (
