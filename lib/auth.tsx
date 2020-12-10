@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  createContext
-} from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { createUser } from "./db";
 
 import firebase from "./firebase";
@@ -42,7 +37,7 @@ export const useProvideAuth = (): IFirebaseContext => {
 
       createUser(user.uid, user);
       setUser(user);
-      
+
       return user;
     } else {
       setUser(null);
