@@ -26,6 +26,9 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const { sites } = await getAllSites();
+  if (!sites) {
+    return;
+  }
   const paths = sites.map((site) => ({
     params: {
       siteId: site.id.toString(),
@@ -80,9 +83,10 @@ const SiteFeedback = ({ initialFeedback }) => {
           </Button>
         </FormControl>
       </Box>
-      {allFeedback && allFeedback.map((feedback) => (
-        <Feedback key={feedback.id} {...feedback} />
-      ))}
+      {allFeedback &&
+        allFeedback.map((feedback) => (
+          <Feedback key={feedback.id} {...feedback} />
+        ))}
     </Box>
   );
 };
