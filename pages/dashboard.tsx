@@ -8,9 +8,6 @@ import { fetcher } from "@/utils/fetcher";
 import SiteTable from "@/components/site-table";
 
 const Dashboard = () => {
-  const auth = useAuth();
-  const { user } = auth;
-
   const { data }: any = useSWR("/api/sites", fetcher);
 
   if (!data) {

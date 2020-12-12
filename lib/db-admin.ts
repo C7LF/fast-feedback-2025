@@ -1,30 +1,42 @@
 import firebase from "./firebase-admin";
+import { compareDesc, parseISO } from "date-fns";
 
 export const getAllFeedback = async (siteId: string) => {
-  const snapshot = await firebase
-    .collection("feedback")
-    .where("siteId", "==", siteId)
-    .get();
+  try {
+    const snapshot = await firebase
+      .collection("feedback")
+      .where("siteId", "==", siteId)
+      .get();
 
-  const feedback = [];
+    const feedback = [];
 
-  /*
-   * for each document recieved, populate feedback array
-   */
-  snapshot.forEach((doc) => {
-    feedback.push({ id: doc.id, ...doc.data() });
-  });
+    // for each document recieved, populate feedback array
+    snapshot.forEach((doc) => {
+      feedback.push({ id: doc.id, ...doc.data() });
+    });
 
-  return feedback;
+    // sort array by newest first
+    feedback.sort((a, b) =>
+      compareDesc(parseISO(a.createdAt), parseISO(b.createdAt))
+    );
+
+    return { feedback };
+  } catch (err) {
+    return { err };
+  }
 };
 
 export const getAllSites = async () => {
-  const snapshot = await firebase.collection("sites").get();
-  const sites = [];
+  try {
+    const snapshot = await firebase.collection("sites").get();
+    const sites = [];
 
-  snapshot.forEach((doc) => {
-    sites.push({ id: doc.id, ...doc.data() });
-  });
+    snapshot.forEach((doc) => {
+      sites.push({ id: doc.id, ...doc.data() });
+    });
 
-  return sites;
+    return { sites };
+  } catch (err) {
+    return { err };
+  }
 };

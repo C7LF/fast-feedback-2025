@@ -2,7 +2,10 @@ import firebase from "./firebase";
 
 const firestore = firebase.firestore();
 
-export const createUser = (uid: string, data: Partial<firebase.firestore.DocumentData>) => {
+export const createUser = (
+  uid: string,
+  data: Partial<firebase.firestore.DocumentData>
+) => {
   return firestore
     .collection("users")
     .doc(uid)
@@ -11,4 +14,10 @@ export const createUser = (uid: string, data: Partial<firebase.firestore.Documen
 
 export const createSite = (data: Partial<firebase.firestore.DocumentData>) => {
   return firestore.collection("sites").add(data);
+};
+
+export const createFeedback = (
+  data: Partial<firebase.firestore.DocumentData>
+) => {
+  return firestore.collection("feedback").add(data);
 };

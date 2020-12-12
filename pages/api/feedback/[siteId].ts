@@ -4,7 +4,10 @@ import { getAllFeedback } from "@/lib/db-admin";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const siteId = req.query.siteId;
-  const feedback = await getAllFeedback(siteId as string);
+  const { feedback, err } = await getAllFeedback(siteId as string);
 
+  if (err) {
+    res.status(500).json({ err });
+  }
   res.status(200).json({ feedback });
 };
