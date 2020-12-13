@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { createSite } from "@/lib/db";
 import { useAuth } from "@/lib/auth";
 import useSWR, { mutate } from "swr";
-import { fetcher } from "@/utils/fetcher";
+import fetcher from "@/utils/fetcher";
 
 type SiteInput = {
   site: string;
@@ -58,7 +58,7 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
       isClosable: true,
     });
     mutate(
-      "/api/sites",
+      user ? ["/api/sites", user.token] : null,
       async (data) => {
         return { sites: [...data.sites, newSite] };
       },

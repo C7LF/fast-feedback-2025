@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { createUser } from "./db";
 
 import firebase from "./firebase";
+import cookie from "js-cookie";
 
 export interface IFirebaseContext {
   user: User;
@@ -15,6 +16,7 @@ export interface User {
   name: string;
   provider: string;
   photoUrl: string;
+  token: any;
 }
 
 export const AuthContext = createContext({} as IFirebaseContext);
@@ -31,16 +33,23 @@ export const useAuth = (): IFirebaseContext => {
 export const useProvideAuth = (): IFirebaseContext => {
   const [user, setUser] = useState<User>(null);
 
-  const handleUser = (rawUser: firebase.User) => {
+  const handleUser = async (rawUser: firebase.User) => {
     if (rawUser) {
-      const user = formatUser(rawUser);
+      const user = await formatUser(rawUser);
+      // Store user object with token and without token seperately
+      const { token, ...userWithoutToken } = user;
 
       createUser(user.uid, user);
       setUser(user);
 
+      cookie.set("fast-feedback-auth", "true", {
+        expires: 1,
+      });
+
       return user;
     } else {
       setUser(null);
+      cookie.remove("fast-feedback-auth");
       return false;
     }
   };
@@ -71,12 +80,14 @@ export const useProvideAuth = (): IFirebaseContext => {
   };
 };
 
-const formatUser = (user: firebase.User): User => {
+const formatUser = async (user: firebase.User): User => {
+  const jwtToken = await user.getIdToken(true);
   return {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
     provider: user.providerData[0].providerId,
+    token: jwtToken,
     photoUrl: user.photoURL,
   };
 };

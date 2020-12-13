@@ -1,5 +1,11 @@
-export const fetcher = async <T>(args: RequestInfo): Promise<T> => {
-  const res = await fetch(args);
+const fetcher = async <T>(url: any, token: any): Promise<T> => {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: new Headers({ "Content-Type": "application/json", token }),
+    credentials: "same-origin",
+  });
 
   return res.json();
 };
+
+export default fetcher

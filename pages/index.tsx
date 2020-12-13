@@ -2,6 +2,7 @@ import { useAuth } from "@/lib/auth";
 import React from "react";
 import { Box, Button, Code, Flex, Heading, Icon } from "@chakra-ui/react";
 import { FireIcon } from "@/styles/icons/fire";
+import Head from "next/head";
 
 const Home: React.FunctionComponent = () => {
   const auth = useAuth();
@@ -16,6 +17,17 @@ const Home: React.FunctionComponent = () => {
       alignItems="center"
       height="100vh"
     >
+      <Head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
+            window.location.href = "/dashboard"
+          }
+        `,
+          }}
+        />
+      </Head>
       <FireIcon boxSize={100} />
       <Heading>Fast Feedback</Heading>
 
