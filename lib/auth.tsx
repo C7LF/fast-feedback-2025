@@ -80,7 +80,7 @@ export const useProvideAuth = (): IFirebaseContext => {
   };
 };
 
-const formatUser = async (user: firebase.User): User => {
+const formatUser = async (user: firebase.User): Promise<User> => {
   const jwtToken = await user.getIdToken(true);
   return {
     uid: user.uid,
