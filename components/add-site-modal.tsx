@@ -77,6 +77,8 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
         backgroundColor="#282828"
         onClick={onOpen}
         leftIcon={icon}
+        _hover={{ bg: "gray.700" }}
+        _active={{ bg: "gray.800" }}
       >
         {text}
       </Button>

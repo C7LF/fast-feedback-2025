@@ -15,6 +15,7 @@ import { FireIcon } from "@/styles/icons/fire";
 import { useAuth } from "@/lib/auth";
 import AddSiteModal from "./add-site-modal";
 import { AddIcon } from "@chakra-ui/icons";
+import NextLink from "next/link";
 
 const DashboardShell: React.FunctionComponent = ({ children }) => {
   const auth = useAuth();
@@ -43,8 +44,12 @@ const DashboardShell: React.FunctionComponent = ({ children }) => {
             justifyContent="flex-start"
           >
             <FireIcon boxSize={8} />
-            <Link>Feedback</Link>
-            <Link display="flex">Sites</Link>
+            <NextLink href="/feedback" passHref>
+              <Link display="flex">Feedback</Link>
+            </NextLink>
+            <NextLink href="/dashboard" passHref>
+              <Link display="flex">Sites</Link>
+            </NextLink>
           </Stack>
           <Stack
             spacing={5}
@@ -54,7 +59,7 @@ const DashboardShell: React.FunctionComponent = ({ children }) => {
           >
             {user && (
               <>
-                <Link>Account</Link>
+                <Link onClick={auth.signout}>Sign out</Link>
                 <Avatar size="sm" src={user?.photoUrl} />
               </>
             )}
@@ -70,19 +75,6 @@ const DashboardShell: React.FunctionComponent = ({ children }) => {
         height="100%"
       >
         <Box maxWidth="1140px" width="100%">
-          <Flex justifyContent="space-between" alignItems="center">
-            <Box>
-              <Breadcrumb>
-                <BreadcrumbItem m={0} pl={0} color="#060606">
-                  <BreadcrumbLink>Sites</BreadcrumbLink>
-                </BreadcrumbItem>
-              </Breadcrumb>
-              <Heading color="#1a1a1a" size="2xl">
-                My Sites
-              </Heading>
-            </Box>
-            <AddSiteModal icon={<AddIcon boxSize={3} />} text="Add site" />
-          </Flex>
           {children}
         </Box>
       </Flex>

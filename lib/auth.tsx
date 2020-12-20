@@ -7,6 +7,7 @@ import cookie from "js-cookie";
 export interface IFirebaseContext {
   user: User;
   signinWithGitHub: () => Promise<any>;
+  signinWithGoogle: () => Promise<any>;
   signout: () => Promise<any>;
 }
 
@@ -61,6 +62,13 @@ export const useProvideAuth = (): IFirebaseContext => {
     return handleUser(response as any);
   };
 
+  const signinWithGoogle = async (): Promise<any> => {
+    const response = await firebase
+      .auth()
+      .signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    return handleUser(response as any);
+  };
+
   const signout = async (): Promise<any> => {
     await firebase.auth().signOut();
     return setUser(null);
@@ -76,6 +84,7 @@ export const useProvideAuth = (): IFirebaseContext => {
   return {
     user,
     signinWithGitHub,
+    signinWithGoogle,
     signout,
   };
 };

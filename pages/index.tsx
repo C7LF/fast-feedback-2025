@@ -1,8 +1,18 @@
 import { useAuth } from "@/lib/auth";
 import React from "react";
-import { Box, Button, Code, Flex, Heading, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Code,
+  Flex,
+  Heading,
+  Icon,
+  Stack,
+} from "@chakra-ui/react";
 import { FireIcon } from "@/styles/icons/fire";
 import Head from "next/head";
+import { GithubIcon } from "@/styles/icons/github";
+import { GoogleIcon } from "@/styles/icons/google";
 
 const Home: React.FunctionComponent = () => {
   const auth = useAuth();
@@ -44,13 +54,33 @@ const Home: React.FunctionComponent = () => {
             Sign Out
           </Button>
         ) : (
-          <Button
-            colorScheme="red"
-            variant="solid"
-            onClick={() => auth.signinWithGitHub()}
-          >
-            Sign In
-          </Button>
+          <Stack>
+            <Button
+              variant="solid"
+              size="lg"
+              color="#ffffff"
+              fontWeight="medium"
+              backgroundColor="#282828"
+              _hover={{ bg: "gray.700" }}
+              _active={{ bg: "gray.800" }}
+              leftIcon={<GithubIcon boxSize={6} />}
+              onClick={() => auth.signinWithGitHub()}
+            >
+              Sign in with Github
+            </Button>
+            <Button
+              backgroundColor="white"
+              color="gray.900"
+              variant="outline"
+              size="lg"
+              fontWeight="medium"
+              _hover={{ bg: "gray.100" }}
+              leftIcon={<GoogleIcon boxSize={6} />}
+              onClick={() => auth.signinWithGoogle()}
+            >
+              Sign in with Google
+            </Button>
+          </Stack>
         )}
       </Box>
     </Flex>

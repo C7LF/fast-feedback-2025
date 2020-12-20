@@ -57,3 +57,18 @@ export const getUserSites = async (userId: string) => {
 
   return { sites };
 };
+
+export const getUserFeedback = async (userId: string) => {
+  const snapshot = await db
+    //@ts-ignore
+    .collection("feedback")
+    .where("authorId", "==", userId)
+    .get();
+  const feedback = [];
+
+  snapshot.forEach((doc) => {
+    feedback.push({ id: doc.id, ...doc.data() });
+  });
+
+  return { feedback };
+};

@@ -21,3 +21,7 @@ export const createFeedback = (
 ) => {
   return firestore.collection("feedback").add(data);
 };
+
+export const deleteFeedback = (id: string) => {
+  return firestore.collection("feedback").doc(id).delete();
+};
