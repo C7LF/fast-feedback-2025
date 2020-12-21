@@ -49,7 +49,7 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
       createdAt: new Date().toISOString(),
       ...data,
     };
-    createSite(newSite);
+    const { id } = createSite(newSite);
     toast({
       title: "Sucess!",
       description: "Site added",
@@ -59,9 +59,9 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
     });
     mutate(
       user ? ["/api/sites", user.token] : null,
-      async (data) => {
-        return { sites: [...data.sites, newSite] };
-      },
+      async (data) => ({
+        sites: [...data.sites, { id, ...newSite }],
+      }),
       false
     );
     onClose();

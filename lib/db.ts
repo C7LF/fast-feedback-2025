@@ -13,7 +13,10 @@ export const createUser = (
 };
 
 export const createSite = (data: Partial<firebase.firestore.DocumentData>) => {
-  return firestore.collection("sites").add(data);
+  const site = firestore.collection("sites").doc();
+  site.set(data);
+  
+  return site;
 };
 
 export const createFeedback = (

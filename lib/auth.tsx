@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { createUser } from "./db";
+import { useRouter } from "next/router";
 
 import firebase from "./firebase";
 import cookie from "js-cookie";
@@ -33,6 +34,7 @@ export const useAuth = (): IFirebaseContext => {
 
 export const useProvideAuth = (): IFirebaseContext => {
   const [user, setUser] = useState<User>(null);
+  const router = useRouter();
 
   const handleUser = async (rawUser: firebase.User) => {
     if (rawUser) {
@@ -50,12 +52,14 @@ export const useProvideAuth = (): IFirebaseContext => {
       return user;
     } else {
       setUser(null);
+      router.push("/");
       cookie.remove("fast-feedback-auth");
       return false;
     }
   };
 
   const signinWithGitHub = async (): Promise<any> => {
+    router.push('/dashboard')
     const response = await firebase
       .auth()
       .signInWithRedirect(new firebase.auth.GithubAuthProvider());
@@ -63,6 +67,7 @@ export const useProvideAuth = (): IFirebaseContext => {
   };
 
   const signinWithGoogle = async (): Promise<any> => {
+    router.push('/dashboard')
     const response = await firebase
       .auth()
       .signInWithRedirect(new firebase.auth.GoogleAuthProvider());
