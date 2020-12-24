@@ -60,7 +60,7 @@ const AddSiteModal = ({ text, icon }: AddSiteModal) => {
     mutate(
       user ? ["/api/sites", user.token] : null,
       async (data) => ({
-        sites: [...data.sites, { id, ...newSite }],
+        sites: [{ id, ...newSite }, ...data.sites],
       }),
       false
     );

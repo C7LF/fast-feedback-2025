@@ -42,7 +42,7 @@ export const useProvideAuth = (): IFirebaseContext => {
       // Store user object with token and without token seperately
       const { token, ...userWithoutToken } = user;
 
-      createUser(user.uid, user);
+      createUser(user.uid, userWithoutToken);
       setUser(user);
 
       cookie.set("fast-feedback-auth", "true", {
@@ -52,7 +52,7 @@ export const useProvideAuth = (): IFirebaseContext => {
       return user;
     } else {
       setUser(null);
-      router.push("/");
+
       cookie.remove("fast-feedback-auth");
       return false;
     }

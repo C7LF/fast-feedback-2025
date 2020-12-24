@@ -12,15 +12,14 @@ import React from "react";
 
 const Feedback = ({ author, text, createdAt, provider, isLast, settings }) => {
   return (
-    <Box borderRadius={4} maxWidth="700px" w="full">
-      <Heading size="sm" as="h3" mb={0} fontWeight="medium">
+    <Box borderRadius={4} maxWidth="700px" w="full" my={4}>
+      <Heading size="sm" as="h3" mb={0} fontWeight="bold">
         {author}
       </Heading>
       <Text color="gray.500" mb={4} fontSize="xs">
         {format(parseISO(createdAt), "PPpp")}
       </Text>
       <Text>{text}</Text>
-      <Divider borderColor="grey.200" />
     </Box>
   );
 };

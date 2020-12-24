@@ -36,7 +36,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -61,8 +61,8 @@ const SiteFeedback = ({ initialFeedback }) => {
       status: "pending",
     };
 
+    inputEl.current.value = ''
     setAllFeedback([newFeedback, ...allFeedback]);
-
     createFeedback(newFeedback);
   };
   return (
